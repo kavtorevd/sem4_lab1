@@ -41,6 +41,7 @@ public:
 			return;
 		data.push_back({ key, value });
 	}
+	bool IsFull() const override { return false; }
 
 	friend ostream& operator <<(ostream& os, ArrayTable& tab) {
 		cout << "\nTable:";
