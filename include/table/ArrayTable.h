@@ -1,15 +1,20 @@
 #pragma once
+#include <vector>
+#include <iostream>
 
 using namespace std;
 
-template <typename TKey, typename TValue> class ArrayTable {
+template <typename TKey, typename TValue> 
+class ArrayTable {
 	struct TTableRec {
 		TKey key;
-		TValue value;
+		TValue* value;
 	};
 	vector<TTableRec> data{};
 public:
-	ArrayTable() {}
+	ArrayTable() = default;
+	size_t size() const noexcept { return data.size(); }
+	TValue& operator[](size_t pos) { return data[pos].value; }
 
 	void Delete(TKey key) {
 		for (size_t i = 0; i < data.size(); i++)
@@ -31,6 +36,14 @@ public:
 		if (Find(key))
 			return;
 		data.push_back({ key, value });
+	}
+
+	friend ostream& operator <<(ostream& os, ArrayTable& tab) {
+		cout << "\nTable:";
+		for (size_t i = 0; i < tab.size(); i++) {
+			os << "\nkey: " << tab.data[i].key << " value: " << tab.data[i].value;
+		}
+		return os;
 	}
 };
 
