@@ -1,5 +1,5 @@
 ﻿#pragma once
-#include "THeadList.h"
+#include <list/THeadList.h>
 #include "TMonom.h"
 #include <string>
 #include<sstream>
