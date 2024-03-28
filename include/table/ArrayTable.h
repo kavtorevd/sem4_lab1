@@ -9,12 +9,13 @@ using namespace std;
 template <typename TKey, typename TValue> 
 class ArrayTable : public SimpleTable<TKey, TValue>{
 public:
+	size_t current;
 	struct TTableRec {
 		TKey key;
 		TValue value;
 	};
 	vector<TTableRec> data{};
-	ArrayTable() = default;
+	ArrayTable() : current(0) { count = 0; }
 	size_t size() const noexcept { return data.size(); }
 	TValue& operator[](size_t pos) { return data[pos].value; }
 
@@ -25,6 +26,7 @@ public:
 				data.pop_back();
 				return;
 			}
+		/*this->*/count--;
 	}
 
 	TValue* Find(TKey key) override {
@@ -40,14 +42,28 @@ public:
 		if (Find(key))
 			return;
 		data.push_back({ key, value });
+		/*this->*/count++;
+		current = data.size() - 1;
 	}
+
+
 	bool IsFull() const override { return false; }
 	// навигация
-	virtual int Reset(void) {}
-	virtual int IsTabEnded(void) {}
-	virtual int GoNext(void) {}
+
+	int Reset() override {
+		current = 0;
+		return current;
+	}
+
+	int IsTabEnded() const override { return current >= data.size(); }
+	
+	int GoNext(void) override {
+		current++;
+		return current;
+	}
 	// доступ
-	virtual TKey GetKey(void) {}
-	virtual TValue GetValuePtr(void) {}
+	TKey GetKey(void) const override { return data[current].key; }
+	TValue GetValuePtr(void) const override { return data[current].value; }
 };
+
 

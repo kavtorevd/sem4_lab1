@@ -20,7 +20,7 @@ public:
 	}
 	virtual bool IsFull() const = 0;                       // заполнена?
 	// основные методы
-	virtual TValue Find(TKey) = 0;         // найти запись
+	virtual TValue* Find(TKey) = 0;         // найти запись
 	virtual void Insert(TKey, TValue) = 0; // вставить
 	virtual void Delete(TKey) = 0;         // удалить запись
 	// навигация
@@ -37,7 +37,7 @@ public:
 		cout << "Table printing" << endl;
 		for (tab.Reset(); !tab.IsTabEnded(); tab.GoNext())
 		{
-			os << " Key: " << tab.GetKey() << " Val: " << *tab.GetValuePtr() << endl;
+			os << " Key: " << tab.GetKey() << " Val: " << tab.GetValuePtr() << endl;
 		}
 		return os;
 	}
