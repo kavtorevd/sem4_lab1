@@ -42,13 +42,12 @@ public:
 		data.push_back({ key, value });
 	}
 	bool IsFull() const override { return false; }
-
-	friend ostream& operator <<(ostream& os, ArrayTable& tab) {
-		cout << "\nTable:";
-		for (size_t i = 0; i < tab.size(); i++) {
-			os << "\nkey: " << tab.data[i].key << " value: " << tab.data[i].value;
-		}
-		return os;
-	}
+	// навигация
+	virtual int Reset(void) {}
+	virtual int IsTabEnded(void) {}
+	virtual int GoNext(void) {}
+	// доступ
+	virtual TKey GetKey(void) {}
+	virtual TValue GetValuePtr(void) {}
 };
 
