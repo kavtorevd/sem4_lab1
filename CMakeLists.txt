@@ -8,6 +8,8 @@ set(CMAKE_CXX_STANDARD 17)
 
 include_directories("include")
 
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/gtest)
+add_subdirectory(gtest)
 
 add_subdirectory(app)
 add_subdirectory(include)

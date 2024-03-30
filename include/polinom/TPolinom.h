@@ -5,8 +5,7 @@
 #include<sstream>
 using namespace std;
 
-const int nonDisplayedZeros = 1; // Êîëè÷åñòâî íåîòîáðàæàåìûõ íóëåé ïðè âûâîäå êîýôôèöèåíòà ïîëèíîìà
-// Êîë-âî ñèìâîëîâ ïîñëå çàïÿòîé = 6 - nonDisplayedZeros
+const int nonDisplayedZeros = 1; 
 const double EPSILON = 1e-6;
 
 
@@ -16,13 +15,13 @@ public:
 	TPolinom();
 	TPolinom(TPolinom& other);
 	TPolinom(string str);
-	TPolinom& operator=(TPolinom& other); // ïðèñâàèâàíèå
-	TPolinom& operator+(TPolinom& q); // ñëîæåíèå ïîëèíîìîâ
-	void AddMonom(TMonom newMonom); // äîáàâëåíèå ìîíîìà
-	TPolinom MultMonom(TMonom monom); // óìíîæåíèå ìîíîìîâ
-	TPolinom& operator*(double coef); // óìíîæåíèå ïîëèíîìà íà ÷èñëî
-	bool operator==(TPolinom& other);  // ñðàâíåíèå ïîëèíîìîâ íà ðàâåíñòâî
-	string ToString(); // ïåðåâîä â ñòðîêó
+	TPolinom& operator=(TPolinom& other); 
+	TPolinom& operator+(TPolinom& q); 
+	void AddMonom(TMonom newMonom); 
+	TPolinom MultMonom(TMonom monom); 
+	TPolinom& operator*(double coef); 
+	bool operator==(TPolinom& other);  
+	string ToString(); 
 };
 
 
