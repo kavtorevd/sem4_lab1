@@ -1,1 +1,2 @@
 add_executable(PolinomTable PolinomTable.cpp)
+add_executable(experiments experiments.cpp)
