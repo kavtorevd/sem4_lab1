@@ -4,7 +4,7 @@
 #include <table/OpenAdressingHashTable.h>
 #include <table/TreeTable.h>
 #include <table/ArrayTable.h>
-#include <table/ArraySorTtable.h>
+#include <table/ArraySortTable.h>
 
 using namespace std;
 
