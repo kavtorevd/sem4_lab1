@@ -34,7 +34,8 @@ public:
         curpos(0),
         cur(nullptr),
         ref(nullptr) {}
-    ~TreeTable() {}
+    ~TreeTable() {
+    }
 
     bool IsFull() const override { return false; }
 

@@ -63,7 +63,7 @@ void TList<T>::InsertFirst(T item)
 {
 	TNode<T>* New_Node = new TNode<T>{ item, pFirst };
 	pFirst = New_Node;
-	if (length == 0) { pLast = pFirst }
+	if (length == 0) { pLast = pFirst; }
 	length++;
 }
 
@@ -143,13 +143,12 @@ void TList<T>::Reset()
 	pPrevious = nullptr;
 }
 
-
 template <class T>
-void TList<T>::GoNext()
-{
+void TList<T>::GoNext() {
 	pPrevious = pCurrent;
-	pCurrent = pCurrent->pNext;
-	if (pCurrent == nullptr || pCurrent == pStop) { pLast = pPrevious; }
+	if (pCurrent != nullptr) {
+		pCurrent = pCurrent->pNext;
+	}
 }
 
 

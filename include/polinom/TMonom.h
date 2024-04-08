@@ -1,9 +1,8 @@
 ﻿#pragma once
-using namespace std;
 struct TMonom
 {
-	double coef; // êîýôôèöèåíò ìîíîìà
-	int index; // èíäåêñ (ñâåðòêà ñòåïåíåé)
+	int coef; // ����������� ������
+	int index; // ������ (������� ��������)
 
 
 	TMonom() {
@@ -11,15 +10,19 @@ struct TMonom
 		index = 0;
 	}
 
-	TMonom(double co, int degX, int degY, int degZ) {
+	TMonom(int co, int degX, int degY, int degZ) {
 		index = degX * 100 + degY * 10 + degZ;
 		coef = co;
 	}
+	TMonom(int coef_, int index_) {
+		index = index_;
+		coef = coef_;
+	}
 
-	void SetCoef(double cval) {
+	void SetCoef(int cval) {
 		coef = cval;
 	}
-	double GetCoef(void) {
+	int GetCoef() {
 		return coef;
 	}
 	void SetIndex(int ival) {

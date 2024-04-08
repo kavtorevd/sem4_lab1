@@ -1,11 +1,13 @@
 ﻿#pragma once
-#include <list/THeadList.h>
+#include "list/THeadList.h"
 #include "TMonom.h"
 #include <string>
 #include<sstream>
+#include <vector>
 using namespace std;
 
-const int nonDisplayedZeros = 1; 
+const int nonDisplayedZeros = 1; // ���������� �������������� ����� ��� ������ ������������ ��������
+// ���-�� �������� ����� ������� = 6 - nonDisplayedZeros
 const double EPSILON = 1e-6;
 
 
@@ -14,14 +16,15 @@ class TPolinom : public THeadList<TMonom>
 public:
 	TPolinom();
 	TPolinom(TPolinom& other);
+	TPolinom(vector<int> a);
 	TPolinom(string str);
-	TPolinom& operator=(TPolinom& other); 
-	TPolinom& operator+(TPolinom& q); 
-	void AddMonom(TMonom newMonom); 
-	TPolinom MultMonom(TMonom monom); 
-	TPolinom& operator*(double coef); 
-	bool operator==(TPolinom& other);  
-	string ToString(); 
+	TPolinom& operator=(TPolinom& other); // ������������
+	TPolinom& operator+(TPolinom& q); // �������� ���������
+	void AddMonom(TMonom newMonom); // ���������� ������
+	TPolinom MultMonom(TMonom monom); // ��������� �������
+	TPolinom& operator*(double coef); // ��������� �������� �� �����
+	bool operator==(TPolinom& other);  // ��������� ��������� �� ���������
+	string ToString(); // ������� � ������
 };
 
 
@@ -188,4 +191,63 @@ string TPolinom::ToString() {
 	}
 	Reset();
 	return result;
+}
+
+TPolinom::TPolinom(vector<int> a) {
+	pStop = nullptr;
+	int c = 1;
+	int i1 = 1;
+	int sz = a.size();
+	TMonom start(a[0], a[1]);
+	InsertFirst(start);
+	Reset();
+	TMonom mon;
+	for (int i = 2; i < sz; i += 2) {
+		int ind1 = a[i + 1];
+		mon = GetCurrentItem();
+		Reset();
+		TMonom first;
+		first = GetCurrentItem();
+		int ind = first.GetIndex();
+		if (ind1 > ind) {
+			InsertFirst(TMonom(a[i], a[i + 1]));
+			c++;
+		}
+		else {
+			while (ind1 < ind) {
+				if (i1 < c) {
+					GoNext();
+					i1++;
+					mon = GetCurrentItem();
+					ind = mon.GetIndex();
+				}
+				else {
+					InsertLast(TMonom(a[i], a[i + 1]));
+					c++;
+					break;
+				}
+			}
+
+			if (ind == ind1) {
+				if (i1 == 1) {
+					first.SetCoef(first.GetCoef() + a[i]);
+					InsertFirst(first);
+					Reset();
+					GoNext();
+					DeleteCurrent();
+				}
+				else {
+					mon.SetCoef(mon.GetCoef() + a[i]);
+					DeleteCurrent();
+					InsertCurrent(mon);
+				}
+			}
+			else {
+				InsertCurrent(TMonom(a[i], a[i + 1]));
+				c++;
+			}
+		}
+		i1 = 1;
+	}
+	Reset();
 }

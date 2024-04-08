@@ -12,7 +12,7 @@ using namespace std;
 template <typename TKey, typename TValue>
 class AllTable {
 private:
-    vector<Table<TKey, TValue>*> tables;
+    vector<SimpleTable<TKey, TValue>*> tables;
     int count;
 
 public:
@@ -20,9 +20,9 @@ public:
         count = 0;
         tables.push_back(new ArrayTable<TKey, TValue>());
         tables.push_back(new ListTable<TKey, TValue>());
-        tables.push_back(new ListHashTable<TKey, TValue>(25));
-        tables.push_back(new OpenAddrHashTable<TKey, TValue>(25, 2));
-        tables.push_back(new SortArrayTable<TKey, TValue>());
+        tables.push_back(new HashTable<TKey, TValue>(25));
+        tables.push_back(new OpenAdressingHashTable<TKey, TValue>(25, 5));
+        tables.push_back(new ArraySortTable<TKey, TValue>());
         tables.push_back(new TreeTable<TKey, TValue>());
     }
 
