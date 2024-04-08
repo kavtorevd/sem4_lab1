@@ -1,10 +1,10 @@
 #pragma once
 #include <table/SimpleTable.h>
-
 #include <iostream>
 #include <stack>
 
 using namespace std;
+
 template <typename TKey, typename TValue>
 struct TreeNode {
     TKey key;
@@ -14,6 +14,7 @@ struct TreeNode {
 
     TreeNode(TKey key, TValue* value, TreeNode* l, TreeNode* r)
         : key(key), value(value), left(l), right(r), height(1) {}
+
     TreeNode* GetLeft() const { return left; }
     TreeNode* GetRight() const { return right; }
 };
@@ -21,161 +22,107 @@ struct TreeNode {
 template <typename TKey, typename TValue>
 class TreeTable : public SimpleTable<TKey, TValue> {
 public:
-    typename ::TreeNode<TKey, TValue>* root;
-    typename ::TreeNode<TKey, TValue>** ref;
-    typename ::TreeNode<TKey, TValue>* cur;
-    int curpos;
-    stack<typename ::TreeNode<TKey, TValue>*> st;
+    typename TreeNode<TKey, TValue>* root;
+    stack<typename TreeNode<TKey, TValue>*> st;
 
-public:
-    TreeTable()
-        : SimpleTable<TKey, TValue>(),
-        root(nullptr),
-        curpos(0),
-        cur(nullptr),
-        ref(nullptr) {}
-    ~TreeTable() {
-    }
+    TreeTable() : SimpleTable<TKey, TValue>(), root(nullptr) {}
+
+    ~TreeTable() {}
 
     bool IsFull() const override { return false; }
 
     TValue* Find(TKey k) override {
-        typename ::TreeNode<TKey, TValue>* node = root;
-        ref = &root;
+        TreeNode<TKey, TValue>* node = root;
         while (node != nullptr) {
-            if (node->key == k) break;
-            if (node->key < k)
-                ref = &node->right;
+            if (node->key == k)
+                return node->value;
+            else if (k < node->key)
+                node = node->left;
             else
-                ref = &node->left;
-            node = *ref;
+                node = node->right;
         }
-        if (node == nullptr) return nullptr;
-        TValue* tmp = node->value;
-        return tmp;
+        return nullptr;
     }
 
     void Insert(TKey key, TValue d) override {
-        if (Find(key) != nullptr) {
+        if (Find(key) != nullptr)
             return;
-        }
-        root = InsertRecursive(root, key, d);
+
+        TValue* value_copy = new TValue(d);
+        root = InsertRecursive(root, key, value_copy);
         this->count++;
     }
 
     void Delete(TKey k) override {
-        if (root == nullptr) return;
+        if (root == nullptr)
+            return;
+
         root = DeleteRecursive(root, k);
         this->count--;
     }
 
     int Reset() override {
-        while (!st.empty()) {
-            st.pop();
-        }
-        curpos = 0;
-        cur = root;
-        return IsTabEnded();
+        st = stack<TreeNode<TKey, TValue>*>();
+        if (root != nullptr)
+            st.push(root);
+        return 0;
     }
 
-
-    int IsTabEnded() const override { return curpos >= count; }
+    int IsTabEnded() const override { return st.empty(); }
 
     int GoNext() override {
-        if (cur == nullptr && !st.empty()) {
-            cur = st.top();
-            st.pop();
-            return 0;
-        }
+        if (st.empty())
+            return 1;
 
-        if (cur != nullptr && cur->right != nullptr) {
-            cur = cur->right;
-            while (cur->left != nullptr) {
-                st.push(cur);
-                cur = cur->left;
-            }
-            return 0;
-        }
+        TreeNode<TKey, TValue>* current = st.top();
+        st.pop();
 
-        cur = nullptr;
-        curpos++;
-        return IsTabEnded();
+        if (current->right != nullptr)
+            st.push(current->right);
+        if (current->left != nullptr)
+            st.push(current->left);
+
+        return 0;
     }
 
     TKey GetKey() const override {
-        if (cur != nullptr) {
-            return cur->key;
-        }
-        else {
+        if (st.empty() || st.top() == nullptr)
             return TKey();
-        }
+        return st.top()->key;
     }
 
     TValue GetValuePtr() const override {
-        if (cur != nullptr) {
-            return *(cur->value);
-        }
-        else {
+        if (st.empty() || st.top() == nullptr)
             return TValue();
-        }
+        return *(st.top()->value);
     }
 
-    
-    template<typename TKey, typename TValue>
-    TreeNode<TKey, TValue>* RotateLeft(TreeNode<TKey, TValue>* node) {
-        auto newRoot = exchange(node->right, exchange(node->right->left, node));
-        return newRoot;
-    }
- 
-    template<typename TKey, typename TValue>
-    TreeNode<TKey, TValue>* RotateRight(TreeNode<TKey, TValue>* node) {
-        auto newRoot = exchange(node->left, exchange(node->left->right, node));
-        return newRoot;
-    }
-  
+    TreeNode<TKey, TValue>* InsertRecursive(TreeNode<TKey, TValue>* node, TKey key, TValue* d) {
+        if (node == nullptr)
+            return new TreeNode<TKey, TValue>(key, d, nullptr, nullptr);
 
-    template<typename TKey, typename TValue>
-    int Height(TreeNode<TKey, TValue>* node) {
-        return (node == nullptr) ? 0 : max(Height(node->left), Height(node->right)) + 1;
-    }
-
-    template<typename TKey, typename TValue>
-    int BalanceFactor(TreeNode<TKey, TValue>* node) {
-        if (node == nullptr) return 0;
-        return max(Height(node->right), Height(node->left));
-    }
-
-    template<typename TKey, typename TValue>
-    TreeNode<TKey, TValue>* InsertRecursive(TreeNode<TKey, TValue>* node, TKey key, TValue d) {
-        if (node == nullptr) {
-            return new typename ::TreeNode<TKey, TValue>(key, new TValue(d), nullptr, nullptr);
-        }
-
-        if (key < node->key) {
+        if (key < node->key)
             node->left = InsertRecursive(node->left, key, d);
-        } else if (key > node->key) {
+        else if (key > node->key)
             node->right = InsertRecursive(node->right, key, d);
-        } else {
+        else {
             delete node->value;
-            node->value = new TValue(d);
+            node->value = d;
             return node;
         }
 
+        node->height = 1 + max(Height(node->left), Height(node->right));
+
         int balance = BalanceFactor(node);
 
-        if (balance > 1 && key < node->left->key) {
+        if (balance > 1 && key < node->left->key)
             return RotateRight(node);
-        }
-
-        if (balance < -1 && key > node->right->key) {
+        if (balance < -1 && key > node->right->key)
             return RotateLeft(node);
-        }
-
         if (balance > 1 && key > node->left->key) {
             node->left = RotateLeft(node->left);
             return RotateRight(node);
         }
-
         if (balance < -1 && key < node->right->key) {
             node->right = RotateRight(node->right);
             return RotateLeft(node);
@@ -184,40 +131,32 @@ public:
         return node;
     }
 
-
-    template<typename TKey, typename TValue>
     TreeNode<TKey, TValue>* DeleteRecursive(TreeNode<TKey, TValue>* node, TKey k) {
         if (node == nullptr) return nullptr;
 
         if (k < node->key) {
-            node->left = DeleteRecursive(move(node->left), k);
+            node->left = DeleteRecursive(node->left, k);
         }
         else if (k > node->key) {
-            node->right = DeleteRecursive(move(node->right), k);
+            node->right = DeleteRecursive(node->right, k);
         }
         else {
             if (node->left == nullptr || node->right == nullptr) {
-                TreeNode<TKey, TValue>* temp = (node->left != nullptr) ? node->left : node->right;
-                if (temp == nullptr) {
-                    delete node;
-                    return nullptr;
-                }
-                else {
-                    *node = *temp;
-                    delete temp;
-                    node->left = nullptr;
-                    node->right = nullptr;
-                    return node;
-                }
+                TreeNode<TKey, TValue>* temp = node->left ? node->left : node->right;
+                delete node;
+                return temp;
             }
             else {
                 TreeNode<TKey, TValue>* temp = FindMin(node->right);
                 node->key = temp->key;
-                node->value = temp->value;
-                node->right = DeleteRecursive(move(node->right), temp->key);
+                node->right = DeleteRecursive(node->right, temp->key);
             }
         }
 
+        // Обновление высоты узла
+        node->height = 1 + max(Height(node->left), Height(node->right));
+
+        // Балансировка дерева
         int balance = BalanceFactor(node);
 
         if (balance > 1 && BalanceFactor(node->right) >= 0) {
@@ -240,10 +179,36 @@ public:
 
         return node;
     }
-  
-    template<typename TKey, typename TValue>
+
     TreeNode<TKey, TValue>* FindMin(TreeNode<TKey, TValue>* node) {
-        return (node->left != nullptr) ? FindMin(node->left) : node;
+        while (node->left != nullptr)
+            node = node->left;
+        return node;
+    }
+
+    TreeNode<TKey, TValue>* RotateLeft(TreeNode<TKey, TValue>* node) {
+        TreeNode<TKey, TValue>* newRoot = node->right;
+        node->right = newRoot->left;
+        newRoot->left = node;
+        return newRoot;
+    }
+
+    TreeNode<TKey, TValue>* RotateRight(TreeNode<TKey, TValue>* node) {
+        TreeNode<TKey, TValue>* newRoot = node->left;
+        node->left = newRoot->right;
+        newRoot->right = node;
+        return newRoot;
+    }
+
+    int Height(TreeNode<TKey, TValue>* node) {
+        if (node == nullptr)
+            return 0;
+        return max(Height(node->left), Height(node->right));
+    }
+
+    int BalanceFactor(TreeNode<TKey, TValue>* node) {
+        if (node == nullptr)
+            return 0;
+        return Height(node->right) - Height(node->left);
     }
 };
-

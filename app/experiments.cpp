@@ -17,31 +17,6 @@ using namespace std;
 
 #include "polinom/TPolinom.h"
 
-vector<int> convertToVector(const std::string& inputString) {
-    vector<int> resultVector;
-    string temp;
-    int digitCount = 0;
-    bool flag = true;
-    for (char c : inputString) {
-        temp += c;
-        digitCount++;
-        if (flag == true) {
-            resultVector.push_back(std::stoi(temp));
-            temp.clear();
-            digitCount = 0;
-            flag = false;
-        }
-        else {
-            if (digitCount == 3) {
-                resultVector.push_back(std::stoi(temp));
-                temp.clear();
-                digitCount = 0;
-                flag = true;
-            }
-        }
-    }
-    return resultVector;
-}
 
 string generateRandomNumber() {
     random_device rd;
@@ -88,7 +63,7 @@ int main() {
     HashTable<string, string> listhashTable(25);
     OpenAdressingHashTable<string, string> openHashTable(25, 2);
     ArraySortTable<string, string> sortArrayTable;
-    const int tableSize = 20000;
+    const int tableSize = 2000;
     string key;
     TPolinom value, value1;
     string s1;
@@ -96,22 +71,20 @@ int main() {
     for (int i = 0; i < tableSize; i++) {
         key = generateRandomString();
         s1 = generateRandomNumber();
-        v = convertToVector(s1);
-        /*value = TPolinom(v);*/
 
         if (i == tableSize / 2) {
-            listTable.Insert("404", "69");
-            arrayTable.Insert("404", "69");
-            treeTable.Insert("404", "69");
-            listhashTable.Insert("404", "69");
-            openHashTable.Insert("404", "69");
-            sortArrayTable.Insert("404", "69");
-            listTable.Insert("405", "69");
-            arrayTable.Insert("405", "69");
-            treeTable.Insert("405", "69");
-            listhashTable.Insert("405", "69");
-            openHashTable.Insert("405", "69");
-            sortArrayTable.Insert("405", "69");
+            listTable.Insert("100", "23");
+            arrayTable.Insert("100", "23");
+            treeTable.Insert("100", "23");
+            listhashTable.Insert("100", "23");
+            openHashTable.Insert("100", "23");
+            sortArrayTable.Insert("100", "23");
+            listTable.Insert("101", "23");
+            arrayTable.Insert("101", "23");
+            treeTable.Insert("101", "23");
+            listhashTable.Insert("101", "23");
+            openHashTable.Insert("101", "23");
+            sortArrayTable.Insert("101", "23");
         }
         else {
             listTable.Insert(key, s1);
@@ -122,13 +95,11 @@ int main() {
             sortArrayTable.Insert(key, s1);
         }
     }
-    /*string f = "1x^0y^0z^0";
-    TPolinom p(f);*/
 
     auto start = std::chrono::steady_clock::now();
     arrayTable.Insert(generateRandomString(), "123");
     auto end = std::chrono::steady_clock::now();
-    std::cout << "Time taken for insertion in ArrayTable: "
+    std::cout << "Insert | ArrayTable: "
         << std::chrono::duration_cast<std::chrono::microseconds>(end -
             start)
         .count()
@@ -137,7 +108,7 @@ int main() {
     start = std::chrono::steady_clock::now();
     listTable.Insert(generateRandomString(), "123");
     end = std::chrono::steady_clock::now();
-    std::cout << "Time taken for insertion in ListTable: "
+    std::cout << "Insert | ListTable: "
         << std::chrono::duration_cast<std::chrono::microseconds>(end -
             start)
         .count()
@@ -146,7 +117,7 @@ int main() {
     start = std::chrono::steady_clock::now();
     treeTable.Insert(generateRandomString(), "123");
     end = std::chrono::steady_clock::now();
-    std::cout << "Time taken for insertion in treeTable: "
+    std::cout << "Insert | treeTable: "
         << std::chrono::duration_cast<std::chrono::microseconds>(end -
             start)
         .count()
@@ -155,7 +126,7 @@ int main() {
     start = std::chrono::steady_clock::now();
     listhashTable.Insert(generateRandomString(), "123");
     end = std::chrono::steady_clock::now();
-    std::cout << "Time taken for insertion in listhashTable: "
+    std::cout << "Insert | listhashTable: "
         << std::chrono::duration_cast<std::chrono::microseconds>(end -
             start)
         .count()
@@ -164,7 +135,7 @@ int main() {
     start = std::chrono::steady_clock::now();
     openHashTable.Insert(generateRandomString(), "123");
     end = std::chrono::steady_clock::now();
-    std::cout << "Time taken for insertion in openAddrHashTable: "
+    std::cout << "Insert | openAddrHashTable: "
         << std::chrono::duration_cast<std::chrono::microseconds>(end -
             start)
         .count()
@@ -173,7 +144,7 @@ int main() {
     start = std::chrono::steady_clock::now();
     sortArrayTable.Insert(generateRandomString(), "123");
     end = std::chrono::steady_clock::now();
-    std::cout << "Time taken for insertion in sortArrayTable: "
+    std::cout << "Insert | sortArrayTable: "
         << std::chrono::duration_cast<std::chrono::microseconds>(end -
             start)
         .count()
@@ -181,54 +152,54 @@ int main() {
     std::cout << std::endl;
 
     start = std::chrono::steady_clock::now();
-    arrayTable.Delete("405");
+    arrayTable.Delete("101");
     end = std::chrono::steady_clock::now();
-    std::cout << "Time taken for deletion in arrayTable: "
+    std::cout << "Delete | arrayTable: "
         << std::chrono::duration_cast<std::chrono::microseconds>(end -
             start)
         .count()
         << " microseconds" << std::endl;
 
     start = std::chrono::steady_clock::now();
-    listTable.Delete("405");
+    listTable.Delete("101");
     end = std::chrono::steady_clock::now();
-    std::cout << "Time taken for deletion in listTable: "
+    std::cout << "Delete | listTable: "
         << std::chrono::duration_cast<std::chrono::microseconds>(end -
             start)
         .count()
         << " microseconds" << std::endl;
 
     start = std::chrono::steady_clock::now();
-    treeTable.Delete("405");
+    treeTable.Delete("101");
     end = std::chrono::steady_clock::now();
-    std::cout << "Time taken for deletion in treeTable: "
+    std::cout << "Delete | treeTable: "
         << std::chrono::duration_cast<std::chrono::microseconds>(end -
             start)
         .count()
         << " microseconds" << std::endl;
 
     start = std::chrono::steady_clock::now();
-    listhashTable.Delete("405");
+    listhashTable.Delete("101");
     end = std::chrono::steady_clock::now();
-    std::cout << "Time taken for deletion in listhashTable: "
+    std::cout << "Delete | listhashTable: "
         << std::chrono::duration_cast<std::chrono::microseconds>(end -
             start)
         .count()
         << " microseconds" << std::endl;
 
     start = std::chrono::steady_clock::now();
-    openHashTable.Delete("405");
+    openHashTable.Delete("101");
     end = std::chrono::steady_clock::now();
-    std::cout << "Time taken for deletion in openAddrHashTable: "
+    std::cout << "Delete | openAddrHashTable: "
         << std::chrono::duration_cast<std::chrono::microseconds>(end -
             start)
         .count()
         << " microseconds" << std::endl;
 
     start = std::chrono::steady_clock::now();
-    sortArrayTable.Delete("405");
+    sortArrayTable.Delete("101");
     end = std::chrono::steady_clock::now();
-    std::cout << "Time taken for deletion in SortArrayTable: "
+    std::cout << "Delete | SortArrayTable: "
         << std::chrono::duration_cast<std::chrono::microseconds>(end -
             start)
         .count()
@@ -237,54 +208,54 @@ int main() {
     std::cout << std::endl;
 
     start = std::chrono::steady_clock::now();
-    arrayTable.Find("404");
+    arrayTable.Find("100");
     end = std::chrono::steady_clock::now();
-    std::cout << "Time taken for search in ArrayTable: "
+    std::cout << "Search | ArrayTable: "
         << std::chrono::duration_cast<std::chrono::microseconds>(end -
             start)
         .count()
         << " microseconds" << std::endl;
 
     start = std::chrono::steady_clock::now();
-    listTable.Find("404");
+    listTable.Find("100");
     end = std::chrono::steady_clock::now();
-    std::cout << "Time taken for search in listTable: "
+    std::cout << "Search | listTable: "
         << std::chrono::duration_cast<std::chrono::microseconds>(end -
             start)
         .count()
         << " microseconds" << std::endl;
 
     start = std::chrono::steady_clock::now();
-    treeTable.Find("404");
+    treeTable.Find("100");
     end = std::chrono::steady_clock::now();
-    std::cout << "Time taken for search in treeTable: "
+    std::cout << "Search | treeTable: "
         << std::chrono::duration_cast<std::chrono::microseconds>(end -
             start)
         .count()
         << " microseconds" << std::endl;
 
     start = std::chrono::steady_clock::now();
-    listhashTable.Find("404");
+    listhashTable.Find("100");
     end = std::chrono::steady_clock::now();
-    std::cout << "Time taken for search in listhashTable: "
+    std::cout << "Search | listhashTable: "
         << std::chrono::duration_cast<std::chrono::microseconds>(end -
             start)
         .count()
         << " microseconds" << std::endl;
 
     start = std::chrono::steady_clock::now();
-    openHashTable.Find("404");
+    openHashTable.Find("100");
     end = std::chrono::steady_clock::now();
-    std::cout << "Time taken for search in openAddrHashTable: "
+    std::cout << "Search | openAddrHashTable: "
         << std::chrono::duration_cast<std::chrono::microseconds>(end -
             start)
         .count()
         << " microseconds" << std::endl;
 
     start = std::chrono::steady_clock::now();
-    sortArrayTable.Find("404");
+    sortArrayTable.Find("100");
     end = std::chrono::steady_clock::now();
-    std::cout << "Time taken for search in sortArrayTable: "
+    std::cout << "Search | sortArrayTable: "
         << std::chrono::duration_cast<std::chrono::microseconds>(end -
             start)
         .count()

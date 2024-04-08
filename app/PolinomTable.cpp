@@ -60,7 +60,6 @@ void GetTablest(AllTable<string, string> tab) {
             break;
         }
         for (int j = 0; j < c; j++) {
-            //TPolinom pol(pols[j][i]);
             cout << keys[j][i] << "  " << pols[j][i] << "     ";
             cout << "\n\n";
         }
@@ -74,13 +73,13 @@ int main() {
     tab.Insert("5", "3x^4y^7z^1+1x^3y^7z^1");
     tab.Insert("6", "1x^3y^7z^1");
     tab.Insert("4", "2x^5y^9z^4");
-    //tab.Insert("59", "6x^4y^8z^9+5x^5y^7z^9");
+    tab.Insert("3", "6x^4y^8z^9+5x^5y^7z^9");
 	cout << "Welcome to the program PolinomTable! \n\n";
 	cout << "Menu of the program: \n";
 	//MenuValue();
     int menu;
     menu = MenuValue();
-    while (menu != 7) {
+    while (menu != 6) {
         switch (menu) {
         case 1: {
             cout << "Enter the key";
