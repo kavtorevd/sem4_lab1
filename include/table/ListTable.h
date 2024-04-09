@@ -113,11 +113,5 @@ public:
             current = next;
         }
     }
- /*   friend ostream& operator <<(ostream& os, ListTable& tab) {
-        cout << "\nTable:";
-        for (tab.current = tab.head; !(tab.current == nullptr); tab.current = tab.current->next) {
-            os << "\nkey: " << tab.current->key << " value: " << *(tab.current->value);
-        }
-        return os;
-    }*/
+
 };

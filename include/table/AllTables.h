@@ -43,7 +43,7 @@ public:
     }
 
     vector<TValue*> Find(TKey key) {
-        std::vector<TValue*> a;
+        vector<TValue*> a;
         for (int i = 0; i < 6; i++) a.push_back(tables[i]->Find(key));
         return a;
     }
